@@ -2,15 +2,15 @@
   <div class="home">
     <nav>
       <h4>Shopping App</h4>
-      <div>
+      <div class="cart-wrapper">
         <div class="cartDiv">
           <button class="btn-cart" @click="toggleCart"><span class="colorBadge"> {{'$ '+parseFloat(cartTotal).toFixed(2)}} </span><span> Cart<sup><span>{{cartQty}}</span></sup> </span><span>&#x21e9;</span></button>
         </div>
-        <template v-if="cartStatus">
+        <div class="dropDown-wrapper" v-if="cartProducts.length > 0 && cartStatus">
         <div class="dropDown" v-for="(cartProduct, index) in cartProducts" :key="index">
-          <div>{{cartProduct.qty}} - {{cartProduct.product.title}} - {{'$'+parseFloat(cartProduct.product.price).toFixed(2)}} -<strong>{{'$'+parseFloat(cartProduct.qty * cartProduct.product.price).toFixed(2)}}</strong></div>
+          <div>{{cartProduct.qty}} - {{cartProduct.product.title}} - {{'$'+parseFloat(cartProduct.product.price).toFixed(2)}} -<strong>{{'$'+parseFloat(cartProduct.qty * cartProduct.product.price).toFixed(2)}}</strong><button @click="removeCart(index)">&minus;</button></div>
         </div>
-        </template>
+        </div>
       </div>
     </nav>
     <div class="h3div">
@@ -90,6 +90,13 @@ export default {
         }
       
     },
+    removeCart (e) {
+       if (this.cartProducts[e].qty > 1) {
+         this.cartProducts[e].qty--
+       } else {
+        this.cartProducts.splice(e,1)
+       }
+    },
     toggleFilter() {
       this.rangestatus=!this.rangestatus
     },
@@ -108,6 +115,9 @@ export default {
 };
 </script>
 <style>
+html {
+  background-color: #f7fff7;
+}
 .home {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -133,6 +143,7 @@ img {
 }
 nav {
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
 }
 .h3div > * {
@@ -191,6 +202,9 @@ hr {
 .productTitle {
   color: #0077b6;
 }
+.cart-wrapper{
+  position: fixed;
+}
 .cartDiv {
   font-weight: bolder;
   display: flex;
@@ -223,6 +237,14 @@ hr {
   display: flex;
   justify-content: flex-end;
   background-color: #f7fff7;
+  border-radius: 10px;
+
+  
+}
+.dropDown-wrapper{
+  width: 400px;
+  border-radius: 10px;
+  border: 3px solid #0077b6;
   border-radius: 10px;
 }
 .colorBadge{
