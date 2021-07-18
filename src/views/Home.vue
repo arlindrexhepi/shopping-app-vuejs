@@ -4,22 +4,21 @@
       <h4>Shopping App</h4>
       <div>
         <div class="cartDiv">
-          <button class="btn-cart" @click="toggleCart"><span class="colorBadge"> {{'$563'}} </span><span> Cart </span> <span class="whiteBadge">{{cartQty}}</span><span>&#x21e9;</span></button>
+          <button class="btn-cart" @click="toggleCart"><span class="colorBadge"> {{'$ '+parseFloat(cartTotal).toFixed(2)}} </span><span> Cart<sup><span>{{cartQty}}</span></sup> </span><span>&#x21e9;</span></button>
         </div>
         <template v-if="cartStatus">
         <div class="dropDown" v-for="(cartProduct, index) in cartProducts" :key="index">
-          <div>{{cartProduct.qty}} - {{cartProduct.product.title}} - <strong>{{'$'+parseFloat(cartProduct.qty * cartProduct.product.price).toFixed(2)}}</strong></div>
+          <div>{{cartProduct.qty}} - {{cartProduct.product.title}} - {{'$'+parseFloat(cartProduct.product.price).toFixed(2)}} -<strong>{{'$'+parseFloat(cartProduct.qty * cartProduct.product.price).toFixed(2)}}</strong></div>
         </div>
         </template>
       </div>
     </nav>
     <div class="h3div">
-      <button class="btn-filter" v-if="!rangestatus" @click="toggleFilter">{{filterText}} <strong>&dollar;</strong></button>
-      <template v-else>
       <button class="btn-filter" @click="toggleFilter">{{filterText}} <strong>&dollar;</strong></button>
+      <div v-if="rangestatus">
       <input type="text" v-model="priceRange">
       <input type="range" min="0" max="1000" v-model="priceRange">
-      </template>
+      </div>
     </div>
       <div class="content card" v-for="(product, index) in filteredProductsByPrice" :key="index">
         <template v-if="product.price<=Number(priceRange)">
@@ -55,26 +54,26 @@ export default {
     }
   },
   computed: {
-    // cartTotal() {
-    //   let sum = 0
-    //   for ( key in this.cartProducts) {
-    //     sum = sum + (this.cartProducts[key].product.price * this.cartProducts[key].qty)
-    //   }
-    //   return sum
-    // },
+    cartTotal() {
+      let sum = 0
+      this.cartProducts.forEach(element => {
+        sum += (element.product.price * element.qty)
+      });
+      return sum
+    },
     cartQty() {
       return this.cartProducts.reduce((total, curr) => (total=total+curr.qty),0)   
     },
     filteredProductsByPrice() {
       return this.products.filter(product => (product.price < this.priceRange && product.price > 0)? product.price : '').sort(function(a, b){return b.price - a.price})
     },
+    //MAKE THE PRICE FILTER
     // computedProductPrice() {
     //   return '$' + parseFloat(this.products.price).toFixed(2)
     // }
   },
   methods: {
     addCart(product) {
-      // return this.cartProducts.push(this.filteredProductsByPrice[e])
       var whichProduct;
       var existing = this.cartProducts.filter(function(item, index) {
         if (item.product.id == Number(product.id)){
@@ -211,8 +210,9 @@ hr {
   background: #0077b6;
   border: none;
   border-radius: 10px;
-  min-width: 200px;
-  min-height: 50px;
+  min-width: 150px;
+  min-height: 30px;
+  padding: 5px;
 }
 .btn-cart:hover{
   background: #f7fff7;
@@ -228,8 +228,8 @@ hr {
 .colorBadge{
   padding: 5px;
   border-radius: 50%;
-  background-color: #f95738;
-  color: #f7fff7;
+  background-color: #f7fff7;
+  color: #f95738;
 }
 .whiteBadge {
   padding: 5px;
@@ -237,4 +237,5 @@ hr {
   background-color: #f7fff7;
   color: #0077b6;
 }
+
 </style>
