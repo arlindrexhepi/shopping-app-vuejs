@@ -1,11 +1,17 @@
 <template>
   <div class="home">
     <nav>
-      <h4>Shopping App</h4><h4>Cart<sup>{{cartTotal}}</sup>
-      <ul>
-        <li v-for="(cartProduct, index) in cartProducts" :key="index"> {{cartProduct.title}}</li>
-      </ul>
-      </h4>
+      <h4>Shopping App</h4>
+      <div>
+        <div class="cartDiv">
+          <button class="btn-cart" @click="toggleCart"><span class="colorBadge"> {{'$563'}} </span><span> Cart </span> <span class="whiteBadge">{{cartQty}}</span><span>&#x21e9;</span></button>
+        </div>
+        <template v-if="cartStatus">
+        <div class="dropDown" v-for="(cartProduct, index) in cartProducts" :key="index">
+          <div>{{cartProduct.qty}} - {{cartProduct.product.title}} - <strong>{{'$'+parseFloat(cartProduct.qty * cartProduct.product.price).toFixed(2)}}</strong></div>
+        </div>
+        </template>
+      </div>
     </nav>
     <div class="h3div">
       <button class="btn-filter" v-if="!rangestatus" @click="toggleFilter">{{filterText}} <strong>&dollar;</strong></button>
@@ -17,11 +23,13 @@
     </div>
       <div class="content card" v-for="(product, index) in filteredProductsByPrice" :key="index">
         <template v-if="product.price<=Number(priceRange)">
-        <h2>{{product.title}}</h2>
+        <h2 class="productTitle">{{product.title}}</h2>
         <img :src="product.image" :alt="product.title">
-        <h2>{{ String('$') + parseFloat(product.price).toFixed(2)}}</h2>
+        <!-- <h2 class="productPrice">{{computedProductPrice()}}</h2> -->
+        <h2 class="productPrice">{{String('$')+parseFloat(product.price).toFixed(2)}}</h2>
         <p>{{product.description.slice(0, 200)}}</p>
-        <button class="btn-add" >Add to Cart</button>
+        <button class="btn-add" @click="addCart(product)">Add to Cart</button>
+        <hr>
         </template>
       </div>
   </div>
@@ -43,23 +51,51 @@ export default {
     priceRange: 100,
     products: [],
     cartProducts: [],
+    cartStatus: false
     }
   },
   computed: {
-    cartTotal() {
-      return this.cartProducts.reduce((total, curr) => (total=total+curr.qnt),0)   
+    // cartTotal() {
+    //   let sum = 0
+    //   for ( key in this.cartProducts) {
+    //     sum = sum + (this.cartProducts[key].product.price * this.cartProducts[key].qty)
+    //   }
+    //   return sum
+    // },
+    cartQty() {
+      return this.cartProducts.reduce((total, curr) => (total=total+curr.qty),0)   
     },
     filteredProductsByPrice() {
-      return this.products.filter(product => (product.price < this.priceRange && product.price > 0)? product.price : product.price).sort(function(a, b){return b.price - a.price})
-    }
+      return this.products.filter(product => (product.price < this.priceRange && product.price > 0)? product.price : '').sort(function(a, b){return b.price - a.price})
+    },
+    // computedProductPrice() {
+    //   return '$' + parseFloat(this.products.price).toFixed(2)
+    // }
   },
   methods: {
-    // addCart(e) {
-    //   this.cartProducts.unshift({product:this.products[e], qnt: +1})
-    //   console.log(this.cartProducts)
-    // }
+    addCart(product) {
+      // return this.cartProducts.push(this.filteredProductsByPrice[e])
+      var whichProduct;
+      var existing = this.cartProducts.filter(function(item, index) {
+        if (item.product.id == Number(product.id)){
+          whichProduct = index;
+          return true
+        } else {
+          return false
+        }
+      })
+        if (existing.length) {
+          this.cartProducts[whichProduct].qty++
+        } else {
+          this.cartProducts.unshift({product: product, qty: 1})
+        }
+      
+    },
     toggleFilter() {
       this.rangestatus=!this.rangestatus
+    },
+    toggleCart() {
+      this.cartStatus=!this.cartStatus
     }
   },
   created() {
@@ -90,9 +126,6 @@ grid-column: 1/ span 12;
 .card {
   padding: 10px;
 }
-.card h2 {
-  color: #0077b6;
-}
 .content p {
   max-width: 300px;
 }
@@ -118,7 +151,7 @@ margin: 10px;
   font-size: 18px;
   border: none;
   border-radius: 10px;
-  background: #0077b6;
+  background: #f95738;
   min-width: 270px;
   min-height: 50px;
   color: #f7fff7;
@@ -126,8 +159,8 @@ margin: 10px;
 }
 .btn-filter:hover {
   background: #f7fff7;
-  color: #0077b6;
-  border: 3px solid #0077b6;
+  color: #f95738;
+  border: 3px solid #f95738;
 }
 .btn-add {
   cursor: pointer;
@@ -144,5 +177,64 @@ margin: 10px;
   background: #f7fff7;
   color: #0077b6;
   border: 3px solid #0077b6;
+}
+hr {
+  background-color: #f95738;
+  margin-top: 25px;
+  width: 70%;
+  height: 2px;
+  border-radius: 10px;
+}
+.productPrice {
+  color: #f95738;
+  font-size: 28px;
+}
+.productTitle {
+  color: #0077b6;
+}
+.cartDiv {
+  font-weight: bolder;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  min-width: 200px;
+}
+.btn-cart {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bolder;
+  color: #f7fff7;
+  background: #0077b6;
+  border: none;
+  border-radius: 10px;
+  min-width: 200px;
+  min-height: 50px;
+}
+.btn-cart:hover{
+  background: #f7fff7;
+  color: #0077b6;
+  border: 3px solid #0077b6;
+}
+.dropDown {
+  display: flex;
+  justify-content: flex-end;
+  background-color: #f7fff7;
+  border-radius: 10px;
+}
+.colorBadge{
+  padding: 5px;
+  border-radius: 50%;
+  background-color: #f95738;
+  color: #f7fff7;
+}
+.whiteBadge {
+  padding: 5px;
+  border-radius: 40%;
+  background-color: #f7fff7;
+  color: #0077b6;
 }
 </style>
