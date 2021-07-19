@@ -96,6 +96,7 @@ export default {
          this.cartProducts[e].qty--
        } else {
         this.cartProducts.splice(e,1)
+        this.cartStatus = false
        }
     },
     toggleFilter() {
