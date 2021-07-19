@@ -97,7 +97,9 @@ export default {
        } else {
         this.cartProducts.splice(e,1)
        }
+       if (this.cartProducts.length == 0) {
         this.cartStatus = false
+       }
     },
     toggleFilter() {
       this.rangestatus=!this.rangestatus
