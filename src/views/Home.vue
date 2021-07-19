@@ -96,8 +96,8 @@ export default {
          this.cartProducts[e].qty--
        } else {
         this.cartProducts.splice(e,1)
-        this.cartStatus = false
        }
+        this.cartStatus = false
     },
     toggleFilter() {
       this.rangestatus=!this.rangestatus
