@@ -8,7 +8,7 @@
         </div>
         <div class="dropDown-wrapper" v-if="cartProducts.length > 0 && cartStatus">
         <div class="dropDown" v-for="(cartProduct, index) in cartProducts" :key="index">
-          <div>{{cartProduct.qty}} - {{cartProduct.product.title}} - {{'$'+parseFloat(cartProduct.product.price).toFixed(2)}} -<strong>{{'$'+parseFloat(cartProduct.qty * cartProduct.product.price).toFixed(2)}}</strong><button @click="removeCart(index)">&minus;</button></div>
+          <div>{{cartProduct.qty}} - {{cartProduct.product.title}} - <TheProductPrice :value="Number(cartProduct.product.price)" /> -<strong><TheProductPrice :value="Number((cartProduct.qty * cartProduct.product.price))"/></strong><button @click="removeCart(index)">&minus;</button></div>
         </div>
         </div>
       </div>
@@ -25,7 +25,7 @@
         <h2 class="productTitle">{{product.title}}</h2>
         <img :src="product.image" :alt="product.title">
         <!-- <h2 class="productPrice">{{computedProductPrice()}}</h2> -->
-        <h2 class="productPrice">{{String('$')+parseFloat(product.price).toFixed(2)}}</h2>
+        <h2 class="productPrice"><TheProductPrice :value="Number(product.price)"/></h2>
         <p>{{product.description.slice(0, 200)}}</p>
         <button class="btn-add" @click="addCart(product)">Add to Cart</button>
         <hr>
@@ -37,10 +37,11 @@
 <script>
 // @ is an alias to /src
 import axios from 'axios'
+import TheProductPrice from '@/components/TheProductPrice.vue';
 export default {
   name: "Home",
   components: {
-
+    TheProductPrice,
   },
   data() {
     return {
