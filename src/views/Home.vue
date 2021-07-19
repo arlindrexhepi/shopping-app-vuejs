@@ -8,7 +8,7 @@
         </div>
         <div class="dropDown-wrapper" v-if="cartProducts.length > 0 && cartStatus">
         <div class="dropDown" v-for="(cartProduct, index) in cartProducts" :key="index">
-          <div>{{cartProduct.qty}} - {{cartProduct.product.title}} - <TheProductPrice :value="Number(cartProduct.product.price)" /> -<strong><TheProductPrice :value="Number((cartProduct.qty * cartProduct.product.price))"/></strong><button @click="removeCart(index)">&minus;</button></div>
+          <div>{{cartProduct.qty}} - {{cartProduct.product.title}} - <TheProductPrice :value="Number(cartProduct.product.price)" /> -<strong><TheProductPrice :value="Number((cartProduct.qty * cartProduct.product.price))"/></strong><button class="remove-btn" @click="removeCart(index)">&minus;</button></div>
         </div>
         </div>
       </div>
@@ -207,6 +207,7 @@ hr {
   position: fixed;
 }
 .cartDiv {
+  position: relative;
   font-weight: bolder;
   display: flex;
   flex-direction: row;
@@ -235,18 +236,15 @@ hr {
   border: 3px solid #0077b6;
 }
 .dropDown {
-  display: flex;
-  justify-content: flex-end;
   background-color: #f7fff7;
-  border-radius: 10px;
-
-  
+  border-radius: 10px;  
 }
 .dropDown-wrapper{
   width: 400px;
-  border-radius: 10px;
   border: 3px solid #0077b6;
   border-radius: 10px;
+  text-align: start;
+  position: absolute;
 }
 .colorBadge{
   padding: 5px;
@@ -259,6 +257,20 @@ hr {
   border-radius: 40%;
   background-color: #f7fff7;
   color: #0077b6;
+}
+.remove-btn {
+  min-width: 25px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: none;
+  background-color: #e63946;
+  color: #f7fff7;
+  font-weight: bolder;
+  margin: 5px 10px;
+}
+.remove-btn:hover {
+  background-color: #962730;
+
 }
 
 </style>
