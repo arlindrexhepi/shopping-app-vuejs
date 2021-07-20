@@ -2,16 +2,6 @@
   <div class="home">
     <nav>
       <h4>Shopping App</h4>
-      <div class="cart-wrapper">
-        <div class="cartDiv">
-          <button class="btn-cart" @click="toggleCart"><span class="colorBadge"> {{'$ '+parseFloat(cartTotal).toFixed(2)}} </span><span> Cart<sup><span>{{cartQty}}</span></sup> </span><span>&#x21e9;</span></button>
-        </div>
-        <div class="dropDown-wrapper" v-if="cartProducts.length > 0 && cartStatus">
-        <div class="dropDown" v-for="(cartProduct, index) in cartProducts" :key="index">
-          <div>{{cartProduct.qty}} - {{cartProduct.product.title}} - <TheProductPrice :value="Number(cartProduct.product.price)" /> -<strong><TheProductPrice :value="Number((cartProduct.qty * cartProduct.product.price))"/></strong><button class="remove-btn" @click="removeCart(index)">&minus;</button></div>
-        </div>
-        </div>
-      </div>
     </nav>
     <div class="h3div">
       <button class="btn-filter" @click="toggleFilter">{{filterText}} <strong>&dollar;</strong></button>
@@ -24,12 +14,21 @@
         <template v-if="product.price<=Number(priceRange)">
         <h2 class="productTitle">{{product.title}}</h2>
         <img :src="product.image" :alt="product.title">
-        <!-- <h2 class="productPrice">{{computedProductPrice()}}</h2> -->
         <h2 class="productPrice"><TheProductPrice :value="Number(product.price)"/></h2>
         <p>{{product.description.slice(0, 200)}}</p>
         <button class="btn-add" @click="addCart(product)">Add to Cart</button>
         <hr>
         </template>
+      </div>
+      <div class="cart-wrapper">
+        <div class="cartDiv">
+          <button class="btn-cart" @click="toggleCart"><span class="colorBadge"> <TheProductPrice :value="Number(cartTotal)"/></span><span> Cart<sup><span>{{cartQty}}</span></sup> </span><span>&#x21e9;</span></button>
+        </div>
+        <div class="dropDown-wrapper" v-if="cartProducts.length > 0 && cartStatus">
+          <div class="dropDown" v-for="(cartProduct, index) in cartProducts" :key="index">
+            <div>{{cartProduct.qty}} - {{cartProduct.product.title}} - <TheProductPrice :value="Number(cartProduct.product.price)" /> -<strong><TheProductPrice :value="Number((cartProduct.qty * cartProduct.product.price))"/></strong><button class="remove-btn" @click="removeCart(index)">&minus;</button></div>
+          </div>
+        </div>
       </div>
   </div>
 </template>
@@ -48,7 +47,7 @@ export default {
     filterText: 'Filter Items by Price ',
     cursor:'pointer',
     rangestatus:false,
-    priceRange: 100,
+    priceRange: 1000,
     products: [],
     cartProducts: [],
     cartStatus: false
@@ -67,11 +66,7 @@ export default {
     },
     filteredProductsByPrice() {
       return this.products.filter(product => (product.price < this.priceRange && product.price > 0)? product.price : '').sort(function(a, b){return b.price - a.price})
-    },
-    //MAKE THE PRICE FILTER
-    // computedProductPrice() {
-    //   return '$' + parseFloat(this.products.price).toFixed(2)
-    // }
+    }
   },
   methods: {
     addCart(product) {
@@ -91,7 +86,7 @@ export default {
         }
       
     },
-    removeCart (e) {
+    removeCart(e) {
        if (this.cartProducts[e].qty > 1) {
          this.cartProducts[e].qty--
        } else {
