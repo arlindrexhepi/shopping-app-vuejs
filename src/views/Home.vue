@@ -3,54 +3,52 @@
     <nav>
       <h4>Shopping App</h4>
     </nav>
-    <div class="h3div">
-      <button class="btn-filter" @click="toggleFilter">{{filterText}} <strong>&dollar;</strong></button>
-      <div v-if="rangestatus">
-      <input type="text" v-model="priceRange">
-      <input type="range" min="0" max="1000" v-model="priceRange">
+    <TheFilter 
+    :textString="filterText"
+    @toggle-filter="toggleFilter"
+    :rangestatus="rangestatus"
+    v-model="priceRange"
+     />
+    <TheProductCard 
+    :filteredProductsByPrice="filteredProductsByPrice"
+    :priceRange="priceRange"
+    @addtoCart="addCart"
+    />
+    <div class="cart-wrapper">
+      <div class="cartDiv">
+        <button class="btn-cart" @click="toggleCart"><span class="colorBadge"> <TheProductPrice :value="Number(cartTotal)"/></span><span> Cart<sup><span>{{cartQty}}</span></sup> </span><span>&#x21e9;</span></button>
+      </div>
+      <div class="dropDown-wrapper" v-if="cartProducts.length > 0 && cartStatus">
+        <div class="dropDown" v-for="(cartProduct, index) in cartProducts" :key="index">
+          <div>{{cartProduct.qty}} - {{cartProduct.product.title}} - <TheProductPrice :value="Number(cartProduct.product.price)" /> -<strong><TheProductPrice :value="Number((cartProduct.qty * cartProduct.product.price))"/></strong><button class="remove-btn" @click="removeCart(index)">&minus;</button></div>
+        </div>
       </div>
     </div>
-      <div class="content card" v-for="(product, index) in filteredProductsByPrice" :key="index">
-        <template v-if="product.price<=Number(priceRange)">
-        <h2 class="productTitle">{{product.title}}</h2>
-        <img :src="product.image" :alt="product.title">
-        <h2 class="productPrice"><TheProductPrice :value="Number(product.price)"/></h2>
-        <p>{{product.description.slice(0, 200)}}</p>
-        <button class="btn-add" @click="addCart(product)">Add to Cart</button>
-        <hr>
-        </template>
-      </div>
-      <div class="cart-wrapper">
-        <div class="cartDiv">
-          <button class="btn-cart" @click="toggleCart"><span class="colorBadge"> <TheProductPrice :value="Number(cartTotal)"/></span><span> Cart<sup><span>{{cartQty}}</span></sup> </span><span>&#x21e9;</span></button>
-        </div>
-        <div class="dropDown-wrapper" v-if="cartProducts.length > 0 && cartStatus">
-          <div class="dropDown" v-for="(cartProduct, index) in cartProducts" :key="index">
-            <div>{{cartProduct.qty}} - {{cartProduct.product.title}} - <TheProductPrice :value="Number(cartProduct.product.price)" /> -<strong><TheProductPrice :value="Number((cartProduct.qty * cartProduct.product.price))"/></strong><button class="remove-btn" @click="removeCart(index)">&minus;</button></div>
-          </div>
-        </div>
-      </div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import axios from 'axios'
+import axios from 'axios';
 import TheProductPrice from '@/components/TheProductPrice.vue';
+import TheFilter from '@/components/TheFilter.vue';
+import TheProductCard from '@/components/TheProductCard.vue';
 export default {
   name: "Home",
   components: {
     TheProductPrice,
+    TheFilter,
+    TheProductCard,
+    
   },
   data() {
     return {
     filterText: 'Filter Items by Price ',
-    cursor:'pointer',
     rangestatus:false,
-    priceRange: 1000,
+    priceRange: Number(1000),
     products: [],
     cartProducts: [],
-    cartStatus: false
+    cartStatus: false,
     }
   },
   computed: {
@@ -83,8 +81,7 @@ export default {
           this.cartProducts[whichProduct].qty++
         } else {
           this.cartProducts.unshift({product: product, qty: 1})
-        }
-      
+        }      
     },
     removeCart(e) {
        if (this.cartProducts[e].qty > 1) {
@@ -101,7 +98,7 @@ export default {
     },
     toggleCart() {
       this.cartStatus=!this.cartStatus
-    }
+    },
   },
   created() {
     axios.get('https://fakestoreapi.com/products/')
