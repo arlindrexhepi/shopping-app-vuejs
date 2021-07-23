@@ -14,29 +14,28 @@
     :priceRange="priceRange"
     @addtoCart="addCart"
     />
-    <div class="cart-wrapper">
-      <div class="cartDiv">
-        <button class="btn-cart" @click="toggleCart"><span class="colorBadge"> <TheProductPrice :value="Number(cartTotal)"/></span><span> Cart<sup><span>{{cartQty}}</span></sup> </span><span>&#x21e9;</span></button>
-      </div>
-      <div class="dropDown-wrapper" v-if="cartProducts.length > 0 && cartStatus">
-        <div class="dropDown" v-for="(cartProduct, index) in cartProducts" :key="index">
-          <div>{{cartProduct.qty}} - {{cartProduct.product.title}} - <TheProductPrice :value="Number(cartProduct.product.price)" /> -<strong><TheProductPrice :value="Number((cartProduct.qty * cartProduct.product.price))"/></strong><button class="remove-btn" @click="removeCart(index)">&minus;</button></div>
-        </div>
-      </div>
-    </div>
+    <TheCart 
+    :cartProducts="cartProducts"
+    :cartStatus="cartStatus"
+    @toggleCart="toggleCart"
+    :cartTotal="cartTotal"
+    :cartQty="cartQty"
+    @removeCart="removeCart"
+    />
+    
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import axios from 'axios';
-import TheProductPrice from '@/components/TheProductPrice.vue';
+import TheCart from '@/components/TheCart.vue';
 import TheFilter from '@/components/TheFilter.vue';
 import TheProductCard from '@/components/TheProductCard.vue';
 export default {
   name: "Home",
   components: {
-    TheProductPrice,
+    TheCart,
     TheFilter,
     TheProductCard,
     
@@ -45,7 +44,7 @@ export default {
     return {
     filterText: 'Filter Items by Price ',
     rangestatus:false,
-    priceRange: Number(1000),
+    priceRange: 1000,
     products: [],
     cartProducts: [],
     cartStatus: false,
