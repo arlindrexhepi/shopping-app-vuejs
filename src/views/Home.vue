@@ -1,112 +1,124 @@
 <template>
   <div class="home">
     <nav>
-      <h4>Shopping App</h4>
+      <h4>MY SHOP</h4>
     </nav>
-    <TheFilter 
-    :textString="filterText"
-    @toggle-filter="toggleFilter"
-    :rangestatus="rangestatus"
-    v-model="priceRange"
-     />
-    <TheProductCard 
-    :filteredProductsByPrice="filteredProductsByPrice"
-    :priceRange="priceRange"
-    @addtoCart="addCart"
+    <TheFilter
+      :textString="filterText"
+      :rangestatus="rangestatus"
+      v-model="priceRange"
+      @toggle-filter="toggleFilter"
     />
-    <TheCart 
-    :cartProducts="cartProducts"
-    :cartStatus="cartStatus"
-    @toggleCart="toggleCart"
-    :cartTotal="cartTotal"
-    :cartQty="cartQty"
-    @removeCart="removeCart"
+    <TheProductCard
+      :filteredProductsByPrice="filteredProductsByPrice"
+      :priceRange="priceRange"
+      @addtoCart="addCart"
     />
-    
+    <TheCart
+      :cartProducts="cartProducts"
+      :cartStatus="cartStatus"
+      :cartTotal="cartTotal"
+      :cartQty="cartQty"
+      @toggleCart="toggleCart"
+      @removeCart="removeCart"
+    />
+
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import axios from 'axios';
-import TheCart from '@/components/TheCart.vue';
-import TheFilter from '@/components/TheFilter.vue';
-import TheProductCard from '@/components/TheProductCard.vue';
+import axios from "axios";
+import TheCart from "@/components/TheCart.vue";
+import TheFilter from "@/components/TheFilter.vue";
+import TheProductCard from "@/components/TheProductCard.vue";
 export default {
   name: "Home",
   components: {
     TheCart,
     TheFilter,
     TheProductCard,
-    
   },
   data() {
     return {
-    filterText: 'Filter Items by Price ',
-    rangestatus:false,
-    priceRange: 1000,
-    products: [],
-    cartProducts: [],
-    cartStatus: false,
-    }
+      filterText: "Filter Items by Price ",
+      rangestatus: false,
+      priceRange: 1000,
+      products: [],
+      cartProducts: [],
+      cartStatus: false,
+    };
   },
   computed: {
     cartTotal() {
-      let sum = 0
-      this.cartProducts.forEach(element => {
-        sum += (element.product.price * element.qty)
+      let sum = 0;
+      this.cartProducts.forEach((element) => {
+        sum += element.product.price * element.qty;
       });
-      return sum
+      return sum;
     },
     cartQty() {
-      return this.cartProducts.reduce((total, curr) => (total=total+curr.qty),0)   
+      return this.cartProducts.reduce(
+        (total, curr) => (total = total + curr.qty),
+        0
+      );
     },
     filteredProductsByPrice() {
-      return this.products.filter(product => (product.price < this.priceRange && product.price > 0)? product.price : '').sort(function(a, b){return b.price - a.price})
-    }
+      return this.products
+        .filter((product) =>
+          product.price < this.priceRange && product.price > 0
+            ? product.price
+            : ""
+        )
+        .sort(function (a, b) {
+          return b.price - a.price;
+        });
+    },
   },
   methods: {
     addCart(product) {
       var whichProduct;
-      var existing = this.cartProducts.filter(function(item, index) {
-        if (item.product.id == Number(product.id)){
+      var existing = this.cartProducts.filter(function (item, index) {
+        if (item.product.id == Number(product.id)) {
           whichProduct = index;
-          return true
+          return true;
         } else {
-          return false
+          return false;
         }
-      })
-        if (existing.length) {
-          this.cartProducts[whichProduct].qty++
-        } else {
-          this.cartProducts.unshift({product: product, qty: 1})
-        }      
+      });
+      if (existing.length) {
+        this.cartProducts[whichProduct].qty++;
+      } else {
+        this.cartProducts.unshift({ product: product, qty: 1 });
+      }
     },
     removeCart(e) {
-       if (this.cartProducts[e].qty > 1) {
-         this.cartProducts[e].qty--
-       } else {
-        this.cartProducts.splice(e,1)
-       }
-       if (this.cartProducts.length == 0) {
-        this.cartStatus = false
-       }
+      if (this.cartProducts[e].qty > 1) {
+        this.cartProducts[e].qty--;
+      } else {
+        this.cartProducts.splice(e, 1);
+      }
+      if (this.cartProducts.length == 0) {
+        this.cartStatus = false;
+      }
     },
     toggleFilter() {
-      this.rangestatus=!this.rangestatus
+      this.rangestatus = !this.rangestatus;
     },
     toggleCart() {
-      this.cartStatus=!this.cartStatus
+      this.cartStatus = !this.cartStatus;
     },
   },
   created() {
-    axios.get('https://fakestoreapi.com/products/')
-    .then((response) => {
-      this.products = response.data
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
+    axios
+      .get("https://fakestoreapi.com/products/")
+      .then((response) => {
+        this.products = response.data;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
 };
 </script>
 <style>
@@ -119,7 +131,7 @@ html {
   grid-gap: 10px;
 }
 .home > * {
-grid-column: 1/ span 12;
+  grid-column: 1 / span 12;
 }
 .content {
   display: flex;
@@ -142,16 +154,16 @@ nav {
   justify-content: space-around;
 }
 .h3div > * {
-margin: 10px;
+  margin: 10px;
 }
 .h3div {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: center;
-  margin:  auto;
+  margin: auto;
 }
-.btn-filter{
+.btn-filter {
   cursor: pointer;
   font-size: 18px;
   border: none;
@@ -183,13 +195,6 @@ margin: 10px;
   color: #0077b6;
   border: 3px solid #0077b6;
 }
-hr {
-  background-color: #f95738;
-  margin-top: 25px;
-  width: 70%;
-  height: 2px;
-  border-radius: 10px;
-}
 .productPrice {
   color: #f95738;
   font-size: 28px;
@@ -197,7 +202,7 @@ hr {
 .productTitle {
   color: #0077b6;
 }
-.cart-wrapper{
+.cart-wrapper {
   position: fixed;
 }
 .cartDiv {
@@ -224,23 +229,29 @@ hr {
   min-height: 30px;
   padding: 5px;
 }
-.btn-cart:hover{
+.btn-cart:hover {
   background: #f7fff7;
   color: #0077b6;
   border: 3px solid #0077b6;
+  padding: 5px;
 }
 .dropDown {
   background-color: #f7fff7;
-  border-radius: 10px;  
+  border-radius: 10px;
+  white-space: wrap;
+  overflow: hidden;
+  margin: auto;
 }
-.dropDown-wrapper{
+.dropDown-wrapper {
+  display: flex;
+  flex-direction: column;
   width: 400px;
   border: 3px solid #0077b6;
   border-radius: 10px;
   text-align: start;
   position: absolute;
 }
-.colorBadge{
+.colorBadge {
   padding: 5px;
   border-radius: 50%;
   background-color: #f7fff7;
@@ -264,7 +275,5 @@ hr {
 }
 .remove-btn:hover {
   background-color: #962730;
-
 }
-
 </style>

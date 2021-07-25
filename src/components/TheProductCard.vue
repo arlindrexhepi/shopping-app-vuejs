@@ -1,5 +1,5 @@
 <template>
-    <div v-for="(product, index) in filteredProductsByPrice" :key="index">
+    <div v-for="(product, index) in filteredProductsByPrice" :key="index" class="animate__animated animate__fadeInRight">
       <div v-if="product.price<=Number(priceRange)">
         <h2 class="productTitle">{{product.title}}</h2>
         <img :src="product.image" :alt="product.title">
@@ -30,5 +30,4 @@ import TheProductPrice from '@/components/TheProductPrice.vue';
 </script>
 
 <style scoped>
-
 </style>
