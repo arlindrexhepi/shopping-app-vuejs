@@ -5,7 +5,7 @@
             <div class="card my-3">
                 <div v-if="product.price<=Number(priceRange)">
                     <div class="align-items-center p-2 text-center">
-                        <img class="card-img-top rounded" :src="product.image" :alt="product.title">
+                        <img class="card-img-top rounded my-3" :src="product.image" :alt="product.title">
                         <h2 class="card-title fw-bolder">{{product.title}}</h2>
                         <div class="card-body mt-3 info">
                         <p class="card-text">{{product.description.slice(0, 200)}}</p>

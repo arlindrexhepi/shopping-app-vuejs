@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <nav>
-      <h4 class="my-4">MY SHOP</h4>
+      <h4>MY SHOP</h4>
       <TheCart
       :cartProducts="cartProducts"
       :cartStatus="cartStatus"
@@ -89,7 +89,7 @@ export default {
       if (existing.length) {
         this.cartProducts[whichProduct].qty++;
       } else {
-        this.cartProducts.unshift({ product: product, qty: 1 });
+        this.cartProducts.push({ product: product, qty: 1 });
       }
     },
     removeCart(e) {
@@ -122,8 +122,8 @@ export default {
 };
 </script>
 <style>
-html {
-  background-color: #f7fff7;
+.home {
+  background: #f7fff7;
 }
 /* .mainContent {
   display: grid;
