@@ -1,5 +1,5 @@
 <template>
-    <div class="animate__animated animate__fadeInDownBig">
+    <div class="animate__animated animate__fadeInDownBig my-4">
     <button class="btn-filter" @click="$emit('toggleFilter')">{{textString}} <font-awesome-icon icon="dollar-sign"></font-awesome-icon></button>
     <transition enter-active-class="animate__animated animate__fadeInDown" leave-active-class="animate__animated animate__fadeOutUp" mode="out-in">
       <div v-show="rangestatus" class="my-4">

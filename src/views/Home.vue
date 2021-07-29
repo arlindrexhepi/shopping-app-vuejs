@@ -1,7 +1,15 @@
 <template>
   <div class="home">
     <nav>
-      <h4>MY SHOP</h4>
+      <h4 class="my-4">MY SHOP</h4>
+      <TheCart
+      :cartProducts="cartProducts"
+      :cartStatus="cartStatus"
+      :cartTotal="cartTotal"
+      :cartQty="cartQty"
+      @toggleCart="toggleCart"
+      @removeCart="removeCart"
+      />
     </nav>
     <TheFilter
       :textString="filterText"
@@ -13,14 +21,6 @@
       :filteredProductsByPrice="filteredProductsByPrice"
       :priceRange="priceRange"
       @addtoCart="addCart"
-    />
-    <TheCart
-      :cartProducts="cartProducts"
-      :cartStatus="cartStatus"
-      :cartTotal="cartTotal"
-      :cartQty="cartQty"
-      @toggleCart="toggleCart"
-      @removeCart="removeCart"
     />
 
   </div>
@@ -125,44 +125,46 @@ export default {
 html {
   background-color: #f7fff7;
 }
-.home {
+/* .mainContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 10px;
+} */
+/* .home {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-gap: 10px;
 }
 .home > * {
   grid-column: 1 / span 12;
-}
-.content {
+} */
+/* .content {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-.card {
+} */
+/* .card {
   padding: 10px;
-}
-.content p {
+} */
+/* .content p {
   max-width: 300px;
-}
-img {
-  max-width: 100px;
-}
-nav {
+} */
+/* nav {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 }
 .h3div > * {
   margin: 10px;
-}
-.h3div {
+} */
+/* .h3div {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: center;
   margin: auto;
-}
+} */
 .btn-filter {
   cursor: pointer;
   font-size: 18px;
@@ -182,7 +184,7 @@ nav {
 .btn-add {
   cursor: pointer;
   font-size: 14px;
-  border: none;
+  border: 3px solid #f7fff7;
   border-radius: 10px;
   background: #0077b6;
   min-width: 170px;
@@ -195,15 +197,9 @@ nav {
   color: #0077b6;
   border: 3px solid #0077b6;
 }
-.productPrice {
-  color: #f95738;
-  font-size: 28px;
-}
-.productTitle {
-  color: #0077b6;
-}
 .cart-wrapper {
-  position: fixed;
+position: fixed;
+z-index: 1;
 }
 .cartDiv {
   position: relative;
@@ -223,7 +219,7 @@ nav {
   font-weight: bolder;
   color: #f7fff7;
   background: #0077b6;
-  border: none;
+  border: 3px solid #f7fff7;
   border-radius: 10px;
   min-width: 150px;
   min-height: 30px;
