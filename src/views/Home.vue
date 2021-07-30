@@ -1,7 +1,10 @@
 <template>
   <div class="home">
-    <nav>
-      <h4>MY SHOP</h4>
+    <nav class="my-3">
+      <div>
+        <h1>MY SHOP</h1>
+      </div>
+      <div>
       <TheCart
       :cartProducts="cartProducts"
       :cartStatus="cartStatus"
@@ -10,6 +13,7 @@
       @toggleCart="toggleCart"
       @removeCart="removeCart"
       />
+      </div>
     </nav>
     <TheFilter
       :textString="filterText"
@@ -66,7 +70,7 @@ export default {
     filteredProductsByPrice() {
       return this.products
         .filter((product) =>
-          product.price < this.priceRange && product.price > 0
+          product.price <= this.priceRange && product.price > 0
             ? product.price
             : ""
         )
@@ -122,9 +126,6 @@ export default {
 };
 </script>
 <style>
-.home {
-  background: #f7fff7;
-}
 /* .mainContent {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;

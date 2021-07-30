@@ -1,20 +1,22 @@
 <template >
-<div class="container my-5">
-    <div class="row row-cols-1 row-cols-lg-3 g-4">
-        <div v-for="(product, index) in filteredProductsByPrice" :key="index" class="col d-flex flex-fill animate__animated animate__fadeInRight">
-            <div class="card my-3">
-                <div v-if="product.price<=Number(priceRange)">
-                    <div class="align-items-center p-2 text-center">
-                        <img class="card-img-top rounded my-3" :src="product.image" :alt="product.title">
-                        <h2 class="card-title fw-bolder">{{product.title}}</h2>
-                        <div class="card-body mt-3 info">
-                        <p class="card-text">{{product.description.slice(0, 200)}}</p>
-                        </div>
-                        <div class="cost mt-3">
-                            <h1 class="fw-bolder"><TheProductPrice :value="Number(product.price)"/></h1>
-                        </div>
-                        <div class="btn-add justify-content-stretch p-3 text-center mt-3 cursor" @click="$emit('addtoCart', product)">
-                            <span > {{addItems}} </span>
+<div class="container-xxl my-5">
+    <div class="row row-cols-3 align-items-start row-col-sm-4 g-3 my-3"> 
+        <div v-for="(product, index) in filteredProductsByPrice" :key="index" class="animate__animated animate__fadeInRight">
+            <div v-if="product.price<=Number(priceRange)">
+                <div class="col">
+                    <div class="card">
+                        <div class="align-items-center p-2 text-center">
+                            <img class="card-img-top img-smaller my-2" :src="product.image" :alt="product.title">
+                            <h2 class="card-title fw-bolder">{{product.title}}</h2>
+                            <div class="card-body mt-3 info">
+                            <p class="card-text">{{product.description.slice(0, 200)}}</p>
+                            </div>
+                            <div class="cost mt-3">
+                                <h1 class="fw-bolder"><TheProductPrice :value="Number(product.price)"/></h1>
+                            </div>
+                            <div class="btn-add justify-content-stretch p-3 text-center mt-3 cursor" @click="$emit('addtoCart', product)">
+                                <span > {{addItems}} </span>
+                            </div>
                         </div>
                     </div>
                 </div>
