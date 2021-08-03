@@ -7,12 +7,12 @@
                     <div class="card">
                         <div class="align-items-center p-2 text-center">
                             <img class="card-img-top img-smaller my-2" :src="product.image" :alt="product.title">
-                            <h2 class="card-title fw-bolder">{{product.title}}</h2>
+                            <h5 class="card-title fw-bolder">{{product.title}}</h5>
                             <div class="card-body mt-3 info">
                             <p class="card-text">{{product.description.slice(0, 200)}}</p>
                             </div>
                             <div class="cost mt-3">
-                                <h1 class="fw-bolder"><TheProductPrice :value="Number(product.price)"/></h1>
+                                <h3 class="fw-bolder"><TheProductPrice :value="Number(product.price)"/></h3>
                             </div>
                             <div class="btn-add justify-content-stretch p-3 text-center mt-3 cursor" @click="$emit('addtoCart', product)">
                                 <span > {{addItems}} </span>
@@ -64,6 +64,13 @@ import TheProductPrice from '@/components/TheProductPrice.vue';
 }
 .cost {
     color: #f95738;
+}
+img {
+    width: 250px;
+    height: 200px;
+}
+.card-text {
+    height: 150px;
 }
 
 </style>

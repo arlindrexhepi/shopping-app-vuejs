@@ -118,6 +118,7 @@ export default {
       .get("https://fakestoreapi.com/products/")
       .then((response) => {
         this.products = response.data;
+        console.log(this.products)
       })
       .catch((err) => {
         console.log(err);
@@ -126,6 +127,9 @@ export default {
 };
 </script>
 <style>
+html {
+  scroll-behavior: smooth;
+}
 /* .mainContent {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
